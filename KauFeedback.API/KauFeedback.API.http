@@ -1,0 +1,6 @@
+@KauFeedback.API_HostAddress = http://localhost:5155
+
+GET {{KauFeedback.API_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

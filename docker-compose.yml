@@ -1,0 +1,39 @@
+services:
+
+  mysql:
+    image: mysql:8.0
+    container_name: kaufeedback-mysql
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: test
+      MYSQL_DATABASE: kaufeedback
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql-data:/var/lib/mysql
+      - ./mysql/init.sql:/docker-entrypoint-initdb.d/init.sql
+
+  api:
+    build:
+      context: ./KauFeedback.API
+      dockerfile: Dockerfile
+    container_name: kaufeedback-api
+    ports:
+      - "8080:8080"
+    environment:
+      - ASPNETCORE_URLS=http://+:8080
+    depends_on:
+      - mysql
+
+  frontend:
+    build:
+      context: ./kaufeedback-ui
+      dockerfile: Dockerfile
+    container_name: kaufeedback-ui
+    ports:
+      - "5173:5173"
+    depends_on:
+      - api
+
+volumes:
+  mysql-data:

@@ -11,10 +11,15 @@ public class AppDbContext : DbContext
     }
 
     public DbSet<Department> Departments => Set<Department>();
-
     public DbSet<Service> Services => Set<Service>();
-
     public DbSet<Location> Locations => Set<Location>();
-
     public DbSet<FeedbackEntry> FeedbackEntries => Set<FeedbackEntry>();
+
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    {
+        modelBuilder.Entity<Department>().ToTable("departments");
+        modelBuilder.Entity<Service>().ToTable("services");
+        modelBuilder.Entity<Location>().ToTable("locations");
+        modelBuilder.Entity<FeedbackEntry>().ToTable("feedbackentries");
+    }
 }

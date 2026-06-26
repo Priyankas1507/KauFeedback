@@ -2,10 +2,14 @@ bin/
 obj/
 
 node_modules/
+dist/
 
 .vs/
+.vscode/
 
 .env
 
 *.user
 *.suo
+
+docker-compose.override.yml

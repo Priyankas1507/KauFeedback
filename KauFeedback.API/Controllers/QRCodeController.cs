@@ -1,22 +1,30 @@
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
 using QRCoder;
 
 namespace KauFeedback.API.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-public class QRCodeController : ControllerBase
+public class QrCodeController : ControllerBase
 {
-    [HttpGet]
-    public IActionResult GetQRCode()
+    private readonly IConfiguration _configuration;
+
+    public QrCodeController(IConfiguration configuration)
     {
-        var url = "http://localhost:5173";
+        _configuration = configuration;
+    }
+
+    [HttpGet]
+    public IActionResult Get()
+    {
+        var url = _configuration["AppSettings:FrontendUrl"];
 
         using var generator = new QRCodeGenerator();
-        var data = generator.CreateQrCode(url, QRCodeGenerator.ECCLevel.Q);
+        using var data = generator.CreateQrCode(url, QRCodeGenerator.ECCLevel.Q);
 
-        var png = new PngByteQRCode(data);
-        var bytes = png.GetGraphic(20);
+        var qrCode = new PngByteQRCode(data);
+        byte[] bytes = qrCode.GetGraphic(20);
 
         return File(bytes, "image/png");
     }
